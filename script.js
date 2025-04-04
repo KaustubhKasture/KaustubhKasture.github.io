@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatInput = document.getElementById('chat-input');
     const sendButton = document.getElementById('send-button');
 
+
     chatInput.addEventListener('focus', () => {
         chatInput.placeholder = '';
     });
@@ -12,10 +13,74 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    const chatMessages = document.querySelector('.chat-messages');
+    const chatBoxContainer = document.querySelector('.chat-box-container');
+    let isExpanded = false; // Track if the chat box has been expanded
+
     sendButton.addEventListener('click', () => {
-        sendButton.classList.add('translucent');
-        setTimeout(() => {
-            sendButton.classList.remove('translucent');
-        }, 300); // Adjust the timeout as needed
+        const messageText = chatInput.value;
+        if (messageText.trim() !== '') {
+            // Expand the chat box if it's not already expanded
+            if (!isExpanded) {
+                chatBoxContainer.classList.add('expanded');
+                chatMessages.classList.add('expanded'); // Add expanded class to chatMessages
+                isExpanded = true;
+            }
+
+            // User message
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('user-message');
+            userMessage.textContent = messageText;
+            chatMessages.appendChild(userMessage);
+
+            // Bot message (placeholder)
+            const botMessage = document.createElement('div');
+            botMessage.classList.add('bot-message');
+            botMessage.textContent = 'This is a placeholder answer.';
+            chatMessages.appendChild(botMessage);
+
+            // Clear input
+            chatInput.value = '';
+
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Translucent effect
+            sendButton.classList.add('translucent');
+            setTimeout(() => {
+                sendButton.classList.remove('translucent');
+            }, 300);
+        }
+    });
+
+    chatInput.addEventListener('keypress', (event) => {
+        if (event.keyCode === 13) {
+            event.preventDefault(); // Prevent form submission
+            sendButton.click(); // Trigger send button click
+        }
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!chatBoxContainer.contains(event.target) && event.target !== chatInput && isExpanded) {
+            chatBoxContainer.classList.remove('expanded');
+            chatMessages.classList.remove('expanded');
+            isExpanded = false;
+        }
+    });
+
+    chatInput.addEventListener('focus', () => {
+        if (!isExpanded && chatMessages.children.length > 0) {
+            chatBoxContainer.classList.add('expanded');
+            chatMessages.classList.add('expanded');
+            isExpanded = true;
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.keyCode === 27 && isExpanded) {
+            chatBoxContainer.classList.remove('expanded');
+            chatMessages.classList.remove('expanded');
+            isExpanded = false;
+        }
     });
 });
