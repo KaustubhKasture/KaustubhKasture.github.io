@@ -176,7 +176,7 @@ header h1 {
 .user-message {
     align-self: flex-end; /* Right align */
     background-color: rgba(0, 0, 0, 0.2);
-    color: #fff;
+    color: #eee;
     padding: 8px 12px;
     border-radius: 15px;
     margin-bottom: 5px;
@@ -186,7 +186,7 @@ header h1 {
 
 .bot-message {
     align-self: flex-start; /* Left align */
-    color: #fff;
+    color: #999;
     margin-bottom: 5px;
     max-width: 70%;
     word-wrap: break-word;
@@ -229,6 +229,14 @@ header h1 {
 
 #send-button.translucent {
     opacity: 0.5;
+}
+
+.photo {
+    width: 100px; /* Increased size */
+    height: 100px; /* Increased size */
+    border-radius: 50%;
+    border: 2px solid #555;
+    margin-top: 1px;
 }
 
 #send-button {

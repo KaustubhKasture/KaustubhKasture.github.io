@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Bot message (placeholder)
             const botMessage = document.createElement('div');
             botMessage.classList.add('bot-message');
-            botMessage.textContent = 'This is a placeholder answer.';
+            botMessage.textContent = 'Personalised LLM in development...';
             chatMessages.appendChild(botMessage);
 
             // Clear input
@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             chatBoxContainer.classList.remove('expanded');
             chatMessages.classList.remove('expanded');
             isExpanded = false;
+            chatInput.blur();
         }
     });
 
@@ -81,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             chatBoxContainer.classList.remove('expanded');
             chatMessages.classList.remove('expanded');
             isExpanded = false;
+            chatInput.blur();
         }
     });
 });
