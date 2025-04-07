@@ -138,6 +138,29 @@ header h1 {
     transition: height 0.3s ease; /* Smooth transition */
 }
 
+.chat-box-container:not(.expanded) {
+    box-shadow: 0 0 10px 1px cyan;
+    animation: move-shadow 5s linear infinite alternate;
+}
+
+@keyframes move-shadow {
+    0% {
+        box-shadow: 1px 1px 10px cyan;
+    }
+    25% {
+        box-shadow: -1px 1px 10px cyan;
+    }
+    50% {
+        box-shadow: -1px -1px 10px cyan;
+    }
+    75% {
+        box-shadow: 1px -1px 10px cyan;
+    }
+    100% {
+        box-shadow: 1px 1px 10px cyan;
+    }
+}
+
 .chat-box-container.expanded {
     height: 300px; /* Expanded height */
 }
