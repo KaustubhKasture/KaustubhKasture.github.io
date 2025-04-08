@@ -32,14 +32,6 @@ header {
     /* border-bottom: 1px solid #2a2a2a; */ /* Removed border */
 }
 
-.photo-placeholder {
-    width: 75px; /* Increased size */
-    height: 75px; /* Increased size */
-    background-color: #333;
-    border-radius: 50%;
-    border: 2px solid #555;
-}
-
 header h1 {
     margin: 0; /* Remove default margin */
     font-size: 2.5em; /* Increased size */
@@ -93,36 +85,6 @@ header h1 {
     background-color: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
-
-/* About Me Section Styles */
-.about-section {
-    max-width: 800px;
-    margin: 0 auto 30px auto; /* Center and add bottom margin */
-    overflow: hidden; /* Needed for smooth transition */
-    transition: max-height 0.5s ease-out, padding 0.5s ease-out, opacity 0.5s ease-out;
-    max-height: 0; /* Start hidden */
-    opacity: 0;
-    border: none;
-}
-
-.about-section p {
-    /* Reset styles */
-    overflow: visible;
-    border-right: none;
-    width: auto;
-    max-width: 800px; /* Match .about-section width */
-    margin: 0 auto; /* Center */
-}
-
-.about-section span {
-    display: inline-block; /* Each word on a same line */
-    overflow: hidden;
-    width: 0;
-    animation:
-        typing 1.5s steps(30, end) forwards,
-        blink-caret .75s step-end infinite;
-}
-
 
 /* Chat Box Styles */
 .chat-box-container {
