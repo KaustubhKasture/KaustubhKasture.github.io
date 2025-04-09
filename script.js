@@ -85,4 +85,37 @@ document.addEventListener('DOMContentLoaded', () => {
             chatInput.blur();
         }
     });
+
+    const aboutLink = document.getElementById('about-link');
+    const aboutMeText = document.getElementById('about-me-text');
+    const aboutMeParagraph = aboutMeText.querySelector('p');
+    const aboutMeTextContent = aboutMeParagraph.textContent;
+    aboutMeParagraph.textContent = '';
+    let isAboutMeVisible = false;
+    let typingInterval;
+
+    aboutLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        aboutMeText.style.display = 'none'; // Hide the text box
+
+        if (isAboutMeVisible) {
+            aboutMeText.style.display = 'none';
+            isAboutMeVisible = false;
+            clearInterval(typingInterval);
+        } else {
+            aboutMeText.style.display = 'block';
+            isAboutMeVisible = true;
+
+            aboutMeParagraph.textContent = ''; // Clear the text before animation
+            let i = 0;
+            typingInterval = setInterval(() => {
+                if (i < aboutMeTextContent.length) {
+                    aboutMeParagraph.textContent += aboutMeTextContent.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                }
+            }, 20);
+        }
+    });
 });
