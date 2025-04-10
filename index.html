@@ -10,12 +10,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap">
 </head>
 <body>
-
     <header>
         <img src="img/profile.png" alt="Kaustubh Kasture" class="photo">
         <h1>Kaustubh Kasture</h1>
         <div class="contact-links">
             <a href="mailto:kaustubh.kasture10@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+            <a href="https://x.com/armodrillo1000" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
             <a href="https://www.linkedin.com/in/kaustubh-kasture/" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
             <a href="https://github.com/KaustubhKasture" aria-label="GitHub"><i class="fab fa-github"></i></a>
         </div>
@@ -23,7 +23,10 @@
 
     <nav class="main-nav">
         <ul>
-            <li><a href="#">Articles</a></li>
+            <li style="position: relative;">
+                <a href="#" id="articles-link">Articles</a>
+                <div id="articles-tooltip" class="tooltip">Yet to write an article :)</div>
+              </li>
             <li><a href="#about-section" id="about-link">About Me</a></li>
             <li><a href="https://drive.google.com/drive/folders/1h7r1v_dMr8MPzP_Dz6WxKM-nGDNC4bVb?usp=sharing">Certifications</a></li>
 <li><a href="https://drive.google.com/file/d/1jCZ5GyfwrIJDCICwtj3OJZvM8egYxXDQ/view">Resume</a></li>
@@ -39,27 +42,73 @@
         </div>
         <div class="chat-input-area">
         <input type="text" id="chat-input" placeholder="Ask questions about Kaustubh">
-        <button id="send-button"><i class="arrow-up"></i></button>
+        <button id="send-button" class="gpt-style-send-button" aria-label="Send message">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="arrow-up">
+                <line x1="12" y1="19" x2="12" y2="5" />
+                <polyline points="5 12 12 5 19 12" />
+            </svg>
+        </button>
+        </div>
     </div>
-    </div>
+
+    <svg class="background-pipe" viewBox="0 0 1000 500" preserveAspectRatio="none">
+        <defs>
+            <!-- Main gradient for the glossy pipe - enhanced with more color stops -->
+            <linearGradient id="glossyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#00ffff" />
+                <stop offset="30%" stop-color="#00dddd" />
+                <stop offset="45%" stop-color="#009999" />
+                <stop offset="55%" stop-color="#006666" />
+                <stop offset="70%" stop-color="#008888" />
+                <stop offset="100%" stop-color="#00cccc" />
+            </linearGradient>
+            
+            <!-- Enhanced highlight gradient for better glossy effect -->
+            <linearGradient id="highlightGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="rgba(0, 204, 204, 0.9)" />
+                <stop offset="15%" stop-color="rgba(0, 204, 204, 0.5)" />
+                <stop offset="30%" stop-color="rgba(0, 204, 204, 0.1)" />
+                <stop offset="100%" stop-color="rgba(0, 204, 204, 0)" />
+            </linearGradient>
+    
+            <!-- Filter for enhanced edge quality -->
+            <filter id="hires" x="-10%" y="-10%" width="120%" height="120%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+                <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+        </defs>
+        
+        <!-- Main pipe with wavy path and glossy gradient -->
+        <path class="pipe" d="M-50,300 C50,200 150,400 250,250 S400,100 550,250 S700,400 850,200 S950,250 1050,300" 
+              stroke="url(#glossyGradient)" 
+              filter="url(#hires)" />
+        
+        <!-- Highlight overlay for glossy effect (thinner to create highlight) -->
+        <path class="pipe" d="M-50,300 C50,200 150,400 250,250 S400,100 550,250 S700,400 850,200 S950,250 1050,300" 
+              stroke="url(#highlightGradient)" 
+              stroke-width="43px" 
+              style="stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 3s linear forwards;" />
+    </svg>
+
 
     <section class="projects">
         <div class="projects-grid">
-            <a href="#" class="project-card">
-                <h3>Project 1</h3>
-                <p>Description of project 1.</p>
+            <a href="https://github.com/KaustubhKasture/Nowcasting" class="project-card">
+                <h3>Nowcasting</h3>
+                <p>Traffic Nowcasting Using CNN</p>
             </a>
-            <a href="#" class="project-card">
-                <h3>Project 2</h3>
-                <p>Description of project 2.</p>
+            <a href="https://github.com/KaustubhKasture/Bank-Marketing-Prediction" class="project-card">
+                <h3>Bank-Marketing-Prediction</h3>
+                <p>Term Deposit prediction using Supervised Learning Algorithms</p>
             </a>
-            <a href="#" class="project-card">
-                <h3>Project 3</h3>
-                <p>Description of project 3.</p>
+            <a href="https://github.com/KaustubhKasture/BCG-PowerCo-Churn" class="project-card">
+                <h3>BCG-PowerCo-Churn</h3>
+                <p>Customer Churn Prediction for BCG client PowerCo</p>
             </a>
-            <a href="#" class="project-card">
-                <h3>Project 4</h3>
-                <p>Description of project 4.</p>
+            <a href="https://github.com/KaustubhKasture/Essential-Datasets" class="project-card">
+                <h3>Essential-Datasets</h3>
+                <p>Titanic,MNIST,Iris,Diamonds,Heart Failure etc.</p>
             </a>
         </div>
     </section>

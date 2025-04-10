@@ -15,15 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const chatMessages = document.querySelector('.chat-messages');
     const chatBoxContainer = document.querySelector('.chat-box-container');
-    let isExpanded = false; // Track if the chat box has been expanded
+    let isExpanded = false; 
 
     sendButton.addEventListener('click', () => {
         const messageText = chatInput.value;
         if (messageText.trim() !== '') {
-            // Expand the chat box if it's not already expanded
             if (!isExpanded) {
                 chatBoxContainer.classList.add('expanded');
-                chatMessages.classList.add('expanded'); // Add expanded class to chatMessages
+                chatMessages.classList.add('expanded');
                 isExpanded = true;
             }
 
@@ -33,19 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
             userMessage.textContent = messageText;
             chatMessages.appendChild(userMessage);
 
-            // Bot message (placeholder)
+            // Bot message
             const botMessage = document.createElement('div');
             botMessage.classList.add('bot-message');
             botMessage.textContent = 'Personalised LLM in development...';
             chatMessages.appendChild(botMessage);
 
-            // Clear input
             chatInput.value = '';
 
-            // Scroll to bottom
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Translucent effect
             sendButton.classList.add('translucent');
             setTimeout(() => {
                 sendButton.classList.remove('translucent');
@@ -55,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chatInput.addEventListener('keypress', (event) => {
         if (event.keyCode === 13) {
-            event.preventDefault(); // Prevent form submission
-            sendButton.click(); // Trigger send button click
+            event.preventDefault();
+            sendButton.click();
         }
     });
 
@@ -96,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     aboutLink.addEventListener('click', (event) => {
         event.preventDefault();
-        aboutMeText.style.display = 'none'; // Hide the text box
+        aboutMeText.style.display = 'none';
 
         if (isAboutMeVisible) {
             aboutMeText.style.display = 'none';
@@ -106,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             aboutMeText.style.display = 'block';
             isAboutMeVisible = true;
 
-            aboutMeParagraph.textContent = ''; // Clear the text before animation
+            aboutMeParagraph.textContent = '';
             let i = 0;
             typingInterval = setInterval(() => {
                 if (i < aboutMeTextContent.length) {
@@ -118,4 +114,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 20);
         }
     });
+});
+
+const articlesLink = document.getElementById('articles-link');
+const tooltip = document.getElementById('articles-tooltip');
+
+articlesLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    tooltip.style.display = 'block';
+
+    setTimeout(() => {
+        tooltip.style.display = 'none';
+    }, 2000);
 });
