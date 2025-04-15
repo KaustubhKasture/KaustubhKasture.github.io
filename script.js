@@ -127,36 +127,3 @@ articlesLink.addEventListener('click', (e) => {
         tooltip.style.display = 'none';
     }, 2000);
 });
-
-function adjustChatBoxForMobile() {
-    const isMobile = window.innerWidth <= 768;
-    const chatBoxContainer = document.querySelector('.chat-box-container');
-    
-    if (isMobile && isExpanded) {
-      chatBoxContainer.style.height = '250px';
-    } else if (isExpanded) {
-      chatBoxContainer.style.height = '300px';
-    }
-  }
-  
-  window.addEventListener('resize', adjustChatBoxForMobile);
-
-  // Improve touch interactions
-document.addEventListener('touchstart', function(e) {
-    if (e.target === articlesLink) {
-      e.preventDefault();
-      tooltip.style.display = 'block';
-      
-      setTimeout(() => {
-        tooltip.style.display = 'none';
-      }, 2000);
-    }
-  });
-  
-  chatInput.addEventListener('touchstart', () => {
-    if (!isExpanded && chatMessages.children.length > 0) {
-      chatBoxContainer.classList.add('expanded');
-      chatMessages.classList.add('expanded');
-      isExpanded = true;
-    }
-  });
