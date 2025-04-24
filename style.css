@@ -194,6 +194,24 @@ header h1 {
     background-color: rgba(0, 0, 0, 0.95);
 }
 
+.disclaimer {
+    background-color: rgba(0, 255, 255, 0.05);
+    border-left: 2px solid cyan;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    color: #cccccc;
+    border-radius: 0 10px 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.disclaimer strong {
+    color: cyan;
+}
+
 .chat-messages {
     flex-grow: 1;
     padding: 10px;
@@ -542,6 +560,12 @@ svg.background-pipe {
         width: 32px;
         height: 32px;
         margin-top: -7px;
+    }
+
+    .disclaimer {
+        font-size: 0.8em;
+        padding: 8px 10px;
+        width: calc(100% - 22px);
     }
 
     a:focus, button:focus, input:focus {

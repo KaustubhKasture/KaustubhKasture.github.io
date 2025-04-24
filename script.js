@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const chatInput = document.getElementById('chat-input');
     const sendButton = document.getElementById('send-button');
-
+    const chatMessages = document.querySelector('.chat-messages');
+    const chatBoxContainer = document.querySelector('.chat-box-container');
+    let isExpanded = false; 
+    let disclaimerAdded = false; // Track if disclaimer has been added to DOM
 
     chatInput.addEventListener('focus', () => {
         chatInput.placeholder = '';
@@ -13,18 +16,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const chatMessages = document.querySelector('.chat-messages');
-    const chatBoxContainer = document.querySelector('.chat-box-container');
-    let isExpanded = false; 
+    function addDisclaimerMessage() {
+        if (!disclaimerAdded) {
+            const disclaimerMessage = document.createElement('div');
+            disclaimerMessage.classList.add('bot-message', 'disclaimer');
+            disclaimerMessage.innerHTML = "<strong>Note:</strong> This is a demonstration of a project! <br> Responses may not be 100% accurate. While answers to Kaustubh’s professional queries are \"mostly\" reliable, informal questions lead to hallucinated responses. They’ve been kept in for fun! :)"
+            
+            // Add disclaimer as first element in chat
+            if (chatMessages.firstChild) {
+                chatMessages.insertBefore(disclaimerMessage, chatMessages.firstChild);
+            } else {
+                chatMessages.appendChild(disclaimerMessage);
+            }
+            
+            disclaimerAdded = true;
+            chatMessages.scrollTop = 0; // Scroll to top to see disclaimer
+        }
+    }
+
+    function expandChatBox() {
+        if (!isExpanded) {
+            chatBoxContainer.classList.add('expanded');
+            chatMessages.classList.add('expanded');
+            isExpanded = true;
+            
+            // Always show disclaimer message when expanding
+            addDisclaimerMessage();
+        }
+    }
 
     sendButton.addEventListener('click', () => {
         const messageText = chatInput.value;
         if (messageText.trim() !== '') {
-            if (!isExpanded) {
-                chatBoxContainer.classList.add('expanded');
-                chatMessages.classList.add('expanded');
-                isExpanded = true;
-            }
+            expandChatBox();
 
             // User message
             const userMessage = document.createElement('div');
@@ -35,8 +59,27 @@ document.addEventListener('DOMContentLoaded', () => {
             // Bot message
             const botMessage = document.createElement('div');
             botMessage.classList.add('bot-message');
-            botMessage.textContent = 'Personalised LLM in development...';
+            botMessage.textContent = '...'; // loading dots
             chatMessages.appendChild(botMessage);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Call FastAPI backend
+            fetch("http://localhost:8000/chat", {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message: messageText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                botMessage.textContent = data.response; // replace dots with real reply
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            })
+            .catch(error => {
+                botMessage.textContent = "Error: could not reach the chatbot.";
+                console.error("Fetch error:", error);
+            });
 
             chatInput.value = '';
 
@@ -62,14 +105,16 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages.classList.remove('expanded');
             isExpanded = false;
             chatInput.blur();
+            
+            // Reset the disclaimerAdded flag when closing the chat
+            // This ensures the disclaimer will be added again when reopening
+            disclaimerAdded = false;
         }
     });
 
     chatInput.addEventListener('focus', () => {
         if (!isExpanded && chatMessages.children.length > 0) {
-            chatBoxContainer.classList.add('expanded');
-            chatMessages.classList.add('expanded');
-            isExpanded = true;
+            expandChatBox();
         }
     });
 
@@ -79,6 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages.classList.remove('expanded');
             isExpanded = false;
             chatInput.blur();
+            
+            // Reset the disclaimerAdded flag when closing the chat
+            disclaimerAdded = false;
         }
     });
 
