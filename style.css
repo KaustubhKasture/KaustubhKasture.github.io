@@ -202,10 +202,9 @@ header h1 {
     font-size: 0.9em;
     color: #cccccc;
     border-radius: 0 10px 10px 0;
-    position: sticky;
-    top: 0;
-    z-index: 10;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
 }
 
 .disclaimer strong {
@@ -221,7 +220,7 @@ header h1 {
 }
 
 .chat-messages.expanded {
-    overflow-y: scroll;
+    overflow-y: auto;
     display: flex;
 }
 
