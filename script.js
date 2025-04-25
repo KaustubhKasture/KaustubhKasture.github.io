@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatMessages = document.querySelector('.chat-messages');
     const chatBoxContainer = document.querySelector('.chat-box-container');
     let isExpanded = false; 
-    let disclaimerAdded = false; // Track if disclaimer has been added to DOM
-
+    let disclaimerAdded = false; 
+    
     chatInput.addEventListener('focus', () => {
         chatInput.placeholder = '';
     });
@@ -17,10 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function addDisclaimerMessage() {
+        // Only add disclaimer if it hasn't been added yet this session
         if (!disclaimerAdded) {
             const disclaimerMessage = document.createElement('div');
             disclaimerMessage.classList.add('bot-message', 'disclaimer');
-            disclaimerMessage.innerHTML = "<strong>Note:</strong> This is a demonstration of a project! <br> Responses may not be 100% accurate. While answers to Kaustubh’s professional queries are \"mostly\" reliable, informal questions lead to hallucinated responses. They’ve been kept in for fun! :)"
+            disclaimerMessage.innerHTML = "<strong>Note:</strong> This is a demonstration of a project! <br> Responses may not be 100% accurate. While answers to Kaustubh’s professional queries are \"mostly\" reliable, informal questions lead to hallucinated responses. They’ve been kept in for fun! :)";
             
             // Add disclaimer as first element in chat
             if (chatMessages.firstChild) {
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             disclaimerAdded = true;
-            chatMessages.scrollTop = 0; // Scroll to top to see disclaimer
+            chatMessages.scrollTop = 0;
         }
     }
 
@@ -40,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages.classList.add('expanded');
             isExpanded = true;
             
-            // Always show disclaimer message when expanding
             addDisclaimerMessage();
         }
     }
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => response.json())
             .then(data => {
-                botMessage.textContent = data.response; // replace dots with real reply
+                botMessage.textContent = data.response;
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             })
             .catch(error => {
@@ -105,10 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages.classList.remove('expanded');
             isExpanded = false;
             chatInput.blur();
-            
-            // Reset the disclaimerAdded flag when closing the chat
-            // This ensures the disclaimer will be added again when reopening
-            disclaimerAdded = false;
         }
     });
 
@@ -124,9 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages.classList.remove('expanded');
             isExpanded = false;
             chatInput.blur();
-            
-            // Reset the disclaimerAdded flag when closing the chat
-            disclaimerAdded = false;
         }
     });
 
