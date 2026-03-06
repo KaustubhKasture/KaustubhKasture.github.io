@@ -2,124 +2,108 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaustubh Kasture</title>
     <link rel="icon" type="image/png" href="img/profile.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap">
 </head>
 <body>
-    <header>
-        <img src="img/profile.png" alt="Kaustubh Kasture" class="photo">
-        <h1>Kaustubh Kasture</h1>
-        <div class="contact-links">
-            <a href="mailto:kaustubh.kasture10@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-            <a href="https://x.com/armodrillo1000" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.linkedin.com/in/kaustubh-kasture/" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="https://github.com/KaustubhKasture" aria-label="GitHub"><i class="fab fa-github"></i></a>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <p class="hero-greeting">Hi, I'm</p>
+                <h1 class="hero-name">Kaustubh Kasture</h1>
+                <p class="hero-tagline">always fine-tuning, never done.</p>
+                <p class="hero-description">Aspiring ML Engineer, building things that matter. Open to opportunities that push boundaries.</p>
+                <div class="hero-meta">
+                    <span class="hero-location"><i class="fas fa-map-marker-alt"></i> India</span>
+                    <span class="hero-time" id="hero-time"></span>
+                </div>
+                <div class="hero-links">
+                    <a href="mailto:kaustubh.kasture10@gmail.com" aria-label="Email" target="_blank" rel="noopener noreferrer"><i class="fas fa-envelope"></i></a>
+                    <a href="https://x.com/HelloKaustubh" aria-label="Twitter" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/in/kaustubh-kasture/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://github.com/KaustubhKasture" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+                </div>
+                <div class="hero-text-links">
+                    <a href="https://drive.google.com/file/d/1jCZ5GyfwrIJDCICwtj3OJZvM8egYxXDQ/view" target="_blank" rel="noopener noreferrer">Resume</a>
+                    <a href="https://drive.google.com/drive/folders/1h7r1v_dMr8MPzP_Dz6WxKM-nGDNC4bVb?usp=sharing" target="_blank" rel="noopener noreferrer">Certifications</a>
+                    <a href="#" id="articles-link">Articles</a>
+                    <div id="articles-tooltip" class="tooltip">Yet to write an article :)</div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="img/profile.png" alt="Kaustubh Kasture">
+            </div>
         </div>
-    </header>
+    </section>
 
-    <div class="particle-bg"></div>
+    <section id="about-section" class="about-section">
+        <p class="about-text">I build and ship ML systems. Fine-tune LLMs, evaluate models, deploy AI agents and turn data into products that actually work. Always building, always iterating.</p>
+        <p class="about-chatbot"> Chat with an AI assistant trained on my portfolio and projects.</p>
+    </section>
 
-    <nav class="main-nav">
-        <ul>
-            <li style="position: relative;">
-                <a href="#" id="articles-link">Articles</a>
-                <div id="articles-tooltip" class="tooltip">Yet to write an article :)</div>
-              </li>
-            <li><a href="#about-section" id="about-link">About Me</a></li>
-            <li><a href="https://drive.google.com/drive/folders/1h7r1v_dMr8MPzP_Dz6WxKM-nGDNC4bVb?usp=sharing">Certifications</a></li>
-<li><a href="https://drive.google.com/file/d/1jCZ5GyfwrIJDCICwtj3OJZvM8egYxXDQ/view">Resume</a></li>
-        </ul>
-    </nav>
-
-    <div id="about-me-text" style="display: none;">
-        <p>My name is Kaustubh. I love Baki anime. I am currently open to any opporutnities that will make me one step closer to Baki Hanma.</p>
-    </div>
-
-    <div class="chat-box-container">
-        <div class="chat-messages">
+    <section class="chatbot-section">
+        <div class="chat-box-container">
+            <div class="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask questions about me and my work..." aria-label="Chat input">
+                <button id="send-button" class="gpt-style-send-button" aria-label="Send message">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="19" x2="12" y2="5" />
+                        <polyline points="5 12 12 5 19 12" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        <div class="chat-input-area">
-        <input type="text" id="chat-input" placeholder="Ask questions about Kaustubh">
-        <button id="send-button" class="gpt-style-send-button" aria-label="Send message">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="arrow-up">
-                <line x1="12" y1="19" x2="12" y2="5" />
-                <polyline points="5 12 12 5 19 12" />
-            </svg>
-        </button>
-        </div>
-    </div>
+    </section>
 
-    <svg class="background-pipe" viewBox="0 0 1000 500" preserveAspectRatio="none">
-        <defs>
-            <!-- Main gradient for the glossy pipe - enhanced with more color stops -->
-            <linearGradient id="glossyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#00ffff" />
-                <stop offset="30%" stop-color="#00dddd" />
-                <stop offset="45%" stop-color="#009999" />
-                <stop offset="55%" stop-color="#006666" />
-                <stop offset="70%" stop-color="#008888" />
-                <stop offset="100%" stop-color="#00cccc" />
-            </linearGradient>
-            
-            <!-- Enhanced highlight gradient for better glossy effect -->
-            <linearGradient id="highlightGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="rgba(0, 204, 204, 0.9)" />
-                <stop offset="15%" stop-color="rgba(0, 204, 204, 0.5)" />
-                <stop offset="30%" stop-color="rgba(0, 204, 204, 0.1)" />
-                <stop offset="100%" stop-color="rgba(0, 204, 204, 0)" />
-            </linearGradient>
-    
-            <!-- Filter for enhanced edge quality -->
-            <filter id="hires" x="-10%" y="-10%" width="120%" height="120%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
-                <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
-                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-            </filter>
-        </defs>
-        
-        <!-- Main pipe with wavy path and glossy gradient -->
-        <path class="pipe" d="M-50,300 C50,200 150,400 250,250 S400,100 550,250 S700,400 850,200 S950,250 1050,300" 
-              stroke="url(#glossyGradient)" 
-              filter="url(#hires)" />
-        
-        <!-- Highlight overlay for glossy effect (thinner to create highlight) -->
-        <path class="pipe" d="M-50,300 C50,200 150,400 250,250 S400,100 550,250 S700,400 850,200 S950,250 1050,300" 
-              stroke="url(#highlightGradient)" 
-              stroke-width="43px" 
-              style="stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 3s linear forwards;" />
-    </svg>
-
-
-    
-    <section class="projects">
+    <section id="projects-section" class="projects-section">
+        <h2 class="section-title">Projects</h2>
+        <p class="section-subtitle">A collection of things I've built.</p>
         <div class="projects-grid">
-            <a href="https://github.com/KaustubhKasture/Nowcasting" class="project-card">
-                <h3>Nowcasting</h3>
+            <a href="https://github.com/KaustubhKasture/Nowcasting" class="project-card" target="_blank" rel="noopener noreferrer">
+                <div class="project-card-header">
+                    <h3>Nowcasting</h3>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
+                </div>
                 <p>Traffic Nowcasting Using CNN</p>
+                <div class="project-tags">
+                    <span>CNN</span><span>Python</span><span>Deep Learning</span>
+                </div>
             </a>
-            <a href="https://github.com/KaustubhKasture/Bank-Marketing-Prediction" class="project-card">
-                <h3>Bank-Marketing-Prediction</h3>
+            <a href="https://github.com/KaustubhKasture/Bank-Marketing-Prediction" class="project-card" target="_blank" rel="noopener noreferrer">
+                <div class="project-card-header">
+                    <h3>Bank-Marketing-Prediction</h3>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
+                </div>
                 <p>Term Deposit prediction using Supervised Learning Algorithms</p>
+                <div class="project-tags">
+                    <span>ML</span><span>Python</span><span>Scikit-learn</span>
+                </div>
             </a>
-            <a href="https://github.com/KaustubhKasture/BCG-PowerCo-Churn" class="project-card">
-                <h3>BCG-PowerCo-Churn</h3>
+            <a href="https://github.com/KaustubhKasture/BCG-PowerCo-Churn" class="project-card" target="_blank" rel="noopener noreferrer">
+                <div class="project-card-header">
+                    <h3>BCG-PowerCo-Churn</h3>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
+                </div>
                 <p>Customer Churn Prediction for BCG client PowerCo</p>
+                <div class="project-tags">
+                    <span>Data Science</span><span>Python</span><span>Analytics</span>
+                </div>
             </a>
-            <a href="https://github.com/KaustubhKasture/Essential-Datasets" class="project-card">
-                <h3>Essential-Datasets</h3>
-                <p>Titanic,MNIST,Iris,Diamonds,Heart Failure etc.</p>
-            </a>
-            <a href="#" class="project-card">
-                <h3>Data Visualization</h3>
-                <p>Interactive dashboards using Python and JavaScript libraries</p>
-            </a>
-            <a href="#" class="project-card">
-                <h3>NLP Sentiment Analysis</h3>
-                <p>Twitter sentiment analysis using BERT and transformers</p>
+            <a href="https://github.com/KaustubhKasture/Essential-Datasets" class="project-card" target="_blank" rel="noopener noreferrer">
+                <div class="project-card-header">
+                    <h3>Essential-Datasets</h3>
+                    <i class="fas fa-arrow-up-right-from-square project-link-icon"></i>
+                </div>
+                <p>Titanic, MNIST, Iris, Diamonds, Heart Failure etc.</p>
+                <div class="project-tags">
+                    <span>Datasets</span><span>ML</span><span>EDA</span>
+                </div>
             </a>
         </div>
     </section>
