@@ -96,4 +96,26 @@ document.addEventListener('DOMContentLoaded', () => {
             tooltip.style.display = 'none';
         }, 2000);
     });
+
+    // Project card default click → open data-default URL
+    document.querySelectorAll('.project-card[data-default]').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.project-icon-btn')) return;
+            window.open(card.dataset.default, '_blank', 'noopener,noreferrer');
+        });
+    });
+
+    // Prevent disabled icon buttons from doing anything
+    document.querySelectorAll('.project-icon-btn.disabled').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    });
+
+    // Stop icon link clicks from also triggering card click
+    document.querySelectorAll('.project-icon-btn:not(.disabled)').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    });
 });
