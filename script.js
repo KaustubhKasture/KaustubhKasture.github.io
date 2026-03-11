@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         try {
-            const response = await fetch('http://localhost:8000/chat', {
+            const response = await fetch('https://kaustubhkasture-github-io.onrender.com/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
