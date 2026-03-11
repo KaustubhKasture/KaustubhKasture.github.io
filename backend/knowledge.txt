@@ -1,0 +1,39 @@
+[IDENTITY]
+Full Name: Kaustubh Kasture
+DOB: 29 Aug 2000, 1:00 PM, Pune
+Location: Pune, India
+Education: Btech in Information Technology from MIT-ADT University, Post Graduation from CDAC (PG-DBDA)
+
+
+[SKILLS]
+- Python, R, Java
+- Data Science, Machine Learning, Deep Learning, Large Language Models(LLMs), Computer Vision
+- PySpark, SQL, MongoDB, ML pipeline design
+- numpy, pandas, matplotlib, seaborn, scikit-learn, tensorflow, keras, Pytorch, XGBoost
+- tidyverse, dplyr, tidyr, ggplot2, caret, lme4, glmnet, R Shiny(rhino)
+- Open-source LLM deployment and RAG systems
+- Dashboarding (Python + JS), Tableau
+
+[INTERESTS]
+- Wants to align career to ML/AI roles in India
+- Goes to gym for strength training 4/week
+- Had auditioned for Boogie Woogie when he was kid
+- Can play Guitar but bad at singing
+- Baki anime fan
+
+[PROJECTS]
+1. Rooflytics-AI -> segment a roof form satellite imagery and classify it as hot or cold based on normalised RGB values
+1. Nowcasting -> Traffic nowcasting using CNN
+2. Bank Marketing Prediction -> Term deposit prediction using supervised learning
+3. BCG PowerCo Churn -> Churn prediction
+4. Essential Datasets -> ML datasets repo
+5. Data Visualization -> Dashboards (pipeline emphasis)
+
+[LINKS]
+GitHub: KaustubhKasture
+LinkedIn: kaustubh-kasture
+Twitter/X: armodrillo1000
+Email: kaustubh.kasture10@gmail.com
+
+[PERSONAL TRAITS]
+- Working on improving English fluency
