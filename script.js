@@ -29,28 +29,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    sendButton.addEventListener('click', () => {
-        const messageText = chatInput.value;
-        if (messageText.trim() !== '') {
-            if (!isExpanded) {
-                chatBoxContainer.classList.add('expanded');
-                chatMessages.classList.add('expanded');
-                isExpanded = true;
+    sendButton.addEventListener('click', async () => {
+        const messageText = chatInput.value.trim();
+        if (messageText === '') return;
+
+        if (!isExpanded) {
+            chatBoxContainer.classList.add('expanded');
+            chatMessages.classList.add('expanded');
+            isExpanded = true;
+        }
+
+        const userMessage = document.createElement('div');
+        userMessage.classList.add('user-message');
+        userMessage.textContent = messageText;
+        chatMessages.appendChild(userMessage);
+
+        const botMessage = document.createElement('div');
+        botMessage.classList.add('bot-message');
+        botMessage.textContent = '...';
+        chatMessages.appendChild(botMessage);
+
+        chatInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+            const response = await fetch('http://localhost:8000/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: messageText })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
             }
 
-            const userMessage = document.createElement('div');
-            userMessage.classList.add('user-message');
-            userMessage.textContent = messageText;
-            chatMessages.appendChild(userMessage);
-
-            const botMessage = document.createElement('div');
-            botMessage.classList.add('bot-message');
-            botMessage.textContent = 'Personalised LLM in development...';
-            chatMessages.appendChild(botMessage);
-
-            chatInput.value = '';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            const data = await response.json();
+            botMessage.textContent = data.response || 'No response received.';
+        } catch (error) {
+            botMessage.textContent = 'Error: could not reach the chatbot.';
+            console.error('Fetch error:', error);
         }
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 
     chatInput.addEventListener('keypress', (event) => {
