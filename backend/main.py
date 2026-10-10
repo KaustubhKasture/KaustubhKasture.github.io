@@ -8,6 +8,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchValue
 from cachetools import TTLCache
 from fastapi.middleware.cors import CORSMiddleware
+from sentence_transformers import CrossEncoder
 
 
 # Load environment variables
@@ -22,6 +23,10 @@ client = QdrantClient(
 )
 
 COLLECTION = "kaustubh_portfolio"
+
+#Cross encoder re-ranker for better relevance
+#reranker = CrossEncoder('BAAI/bge-reranker-base-v1.5')
+reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L4-v2")
 
 # RAM cache for question embeddings (fast reuse)
 embedding_cache = {}
@@ -64,6 +69,81 @@ def get_question_embedding(q: str):
     question_vec_cache[q] = vec
     return vec
 
+GROQ_CHAT_URL = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL = "qwen/qwen3.8-27b"
+
+def groq_chat(prompt: str, max_tokens: int, temperature: float) -> str:
+    """Call Groq chat completions. reasoning_effort none keeps short RAG replies out of thinking tokens."""
+    r = requests.post(
+        GROQ_CHAT_URL,
+        headers={
+            "Authorization": f"Bearer {os.getenv('GROQ_API_KEY')}",
+            "Content-Type": "application/json",
+        },
+        json={
+            "model": GROQ_MODEL,
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": max_tokens,
+            "temperature": temperature,
+            "reasoning_effort": "none",
+        },
+        timeout=30,
+    )
+
+    if r.status_code != 200:
+        raise ValueError(f"Groq API error: {r.status_code} {r.text}")
+
+    content = r.json()["choices"][0]["message"].get("content")
+    if not content or not str(content).strip():
+        raise ValueError("Groq returned an empty response")
+    return str(content).strip()
+
+def rewrite_query(q: str) -> str:
+    """Rewrite the query to focus on Kaustubh portfolio information"""
+    prompt = f"""
+    Rewrite the following question to focus only on information about Kaustubh Kasture and his portfolio.
+
+    Query: {q}
+    Rewritten Query:
+    """
+    return groq_chat(prompt, max_tokens=40, temperature=0.1)
+
+def qdrant_search(query_text: str, limit: int = 10):
+    """Vector Search in Qdrant using rewritten query and filter for verified context only"""
+    q_vec = get_question_embedding(query_text)
+    res = client.query_points(
+        collection_name=COLLECTION,
+        query=q_vec,
+        limit=limit,
+        query_filter=Filter(
+            must=[
+                FieldCondition(
+                    key="verified",
+                    match=MatchValue(value=True),
+                )
+            ]
+        ),
+    )
+    return res.points
+
+def rerank_results(query_text: str, points, top_k: int = 5):
+    """Rerank Qdrant results using cross-encoder relevance scores"""
+    docs = []
+    for hit in points:
+        payload = hit.payload or {}
+        text = payload.get("text", "")
+        if text:
+            docs.append(text)
+    
+    if not docs:
+        return ""
+    
+    pairs = [(query_text, doc) for doc in docs]
+    scores = reranker.predict(pairs)
+    ranked = sorted(zip(scores, docs),reverse = True)
+    top_docs = [doc for _, doc in ranked[:top_k]]
+    return "\n".join(top_docs)
+
 # Initialize FastAPI
 app = FastAPI(title="Kaustubh Portfolio Chatbot")
 
@@ -89,34 +169,24 @@ def chat(req: ChatRequest):
     q = req.message.strip()
     if not q:
         raise HTTPException(status_code=400, detail="Empty message")
-
-    # 1. Embed the question
+    
+    # Rewrite query to focus on Kaustubh portfolio (helps both embedding and LLM relevance)
     try:
-        q_vec = get_question_embedding(q)
+        rewritten = rewrite_query(q)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-    # 2. Vector search in Qdrant (only verified personal context)
+        raise HTTPException(status_code=500, detail=f"Query rewriting failed: {str(e)}")
+    
+    # Embed the rewritten query and search in Qdrant for verified context only
     try:
-        res = client.query_points(
-        collection_name=COLLECTION,
-        query=q_vec,
-        limit=5,
-        query_filter=Filter(
-            must=[
-                FieldCondition(
-                    key="verified",
-                    match=MatchValue(value=True),
-                )
-            ]
-        ),
-    )
-        search_results = res.points
-        #context = "\n".join([hit.payload["text"] for hit in search_results]) if search_results else ""
-        context = "\n".join(hit.payload.get("text", "") for hit in search_results if hit.payload)
-
+        search_results = qdrant_search(rewritten, limit=10)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Vector search failed: {str(e)}")
+    
+    # Rerank results with cross-encoder for better relevance    
+    try:
+        context = rerank_results(rewritten, search_results, top_k=5)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Reranking failed: {str(e)}")
 
     # 3. Strict grounded prompt to reduce hallucination
     prompt = f"""
@@ -125,7 +195,7 @@ You are Kaustubh Kasture’s AI portfolio assistant.
 IMPORTANT RULE (highest priority):
 - Only answer questions that are directly about Kaustubh Kasture or his portfolio.
 - If a question is not about him, respond exactly:
-  "I’m sorry, I can’t answer that right now. Do you have any other questions about Kaustubh? 😊"
+  "I’m sorry, I can’t answer that right now. Do you have any other questions about Kaustubh?"
 
 Today’s date: {datetime.now().strftime("%Y-%m-%d")}
 
@@ -148,28 +218,9 @@ User Question: {q}
 Answer:
 """
 
-    # 4. Call HuggingFace inference API with smaller model (Gemma 2B)
+    # 4. Answer from retrieved context with Groq-hosted Qwen 3.8 27B
     try:
-        llm_res = requests.post(
-    "https://router.huggingface.co/v1/chat/completions",
-    headers={
-        "Authorization": f"Bearer {os.getenv('HF_TOKEN')}",
-        "Content-Type": "application/json",
-    },
-    json={
-        "model": "Qwen/Qwen3-4B-Instruct-2507",
-        "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 200,
-        "temperature": 0.2,
-    },
-    timeout=30,
-)
-
-        if llm_res.status_code != 200:
-            raise ValueError(f"LLM API error: {llm_res.status_code} {llm_res.text}")
-
-        data = llm_res.json()
-        response_text = data["choices"][0]["message"]["content"].strip()
+        response_text = groq_chat(prompt, max_tokens=200, temperature=0.2)
         return {"response": response_text}
 
     except Exception as e:

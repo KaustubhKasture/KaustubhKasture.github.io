@@ -3,6 +3,7 @@ Full Name: Kaustubh Kasture
 DOB: 29 Aug 2000, 1:00 PM, Pune
 Location: Pune, India
 Education: Btech in Information Technology from MIT-ADT University, Post Graduation from CDAC (PG-DBDA)
+Job: Junior Data Scientist at PRGX
 
 
 [SKILLS]

@@ -1,7 +1,7 @@
 import os, uuid, requests
 from qdrant_client import QdrantClient
-from qdrant_client.models import PointStruct, VectorParams, Distance, Filter, FieldCondition, Match
-from dotenv import load_dotenv
+from qdrant_client.models import PointStruct, VectorParams, Distance
+from dotenv import load_dotenv  
 
 # Load API keys
 load_dotenv("secrets.env")
@@ -93,4 +93,4 @@ for i, chunk in enumerate(chunks):
     except Exception as e:
         print(f"Embedding failed for this chunk: {str(e)}")
 
-print("\n🚀 All done! Knowledge indexed into Qdrant Cloud in semantic sections.")
+print("\n All done! Knowledge indexed into Qdrant Cloud in semantic sections.")
