@@ -8,7 +8,6 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchValue
 from cachetools import TTLCache
 from fastapi.middleware.cors import CORSMiddleware
-from sentence_transformers import CrossEncoder
 
 
 # Load environment variables
@@ -23,10 +22,6 @@ client = QdrantClient(
 )
 
 COLLECTION = "kaustubh_portfolio"
-
-#Cross encoder re-ranker for better relevance
-#reranker = CrossEncoder('BAAI/bge-reranker-base-v1.5')
-reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L4-v2")
 
 # RAM cache for question embeddings (fast reuse)
 embedding_cache = {}
@@ -126,23 +121,17 @@ def qdrant_search(query_text: str, limit: int = 10):
     )
     return res.points
 
-def rerank_results(query_text: str, points, top_k: int = 5):
-    """Rerank Qdrant results using cross-encoder relevance scores"""
+def select_context(points, top_k: int = 5) -> str:
+    """Keep the highest-scoring Qdrant hits. Results are already ranked by cosine similarity."""
+    ranked = sorted(points, key=lambda hit: hit.score or 0, reverse=True)
     docs = []
-    for hit in points:
-        payload = hit.payload or {}
-        text = payload.get("text", "")
+    for hit in ranked:
+        text = (hit.payload or {}).get("text", "")
         if text:
             docs.append(text)
-    
-    if not docs:
-        return ""
-    
-    pairs = [(query_text, doc) for doc in docs]
-    scores = reranker.predict(pairs)
-    ranked = sorted(zip(scores, docs),reverse = True)
-    top_docs = [doc for _, doc in ranked[:top_k]]
-    return "\n".join(top_docs)
+        if len(docs) >= top_k:
+            break
+    return "\n".join(docs)
 
 # Initialize FastAPI
 app = FastAPI(title="Kaustubh Portfolio Chatbot")
@@ -182,11 +171,11 @@ def chat(req: ChatRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Vector search failed: {str(e)}")
     
-    # Rerank results with cross-encoder for better relevance    
+    # Qdrant already ranks by similarity. A local cross-encoder needs PyTorch, which exceeds the 512 MB free instance.
     try:
-        context = rerank_results(rewritten, search_results, top_k=5)
+        context = select_context(search_results, top_k=5)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Reranking failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Context selection failed: {str(e)}")
 
     # 3. Strict grounded prompt to reduce hallucination
     prompt = f"""
